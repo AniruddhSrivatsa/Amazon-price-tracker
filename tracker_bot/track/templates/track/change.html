@@ -1,0 +1,10 @@
+{%extends "track/base.html" %}
+{%block content%}
+<form method="POST" action="{%url 'track:home'%}">
+    {%csrf_token %}
+    <p>Change the price of the item: <strong>{{object.name}}</strong></p>
+    <label><strong>Price: </strong></label>
+    <input type="number" name="c" step="any" />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock content%}

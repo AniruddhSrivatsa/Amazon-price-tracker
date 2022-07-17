@@ -1,0 +1,63 @@
+{% extends "track/base.html" %}
+{% load crispy_forms_tags %}
+{% block content%}
+{% load coloring %}
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="additemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add an item for tracking</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST" autocomplete="off">
+              {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#additemModal">Add</button>
+        <a href="{%url 'track:updates'%}">
+        <button class="btn btn-info">Update</button>
+        </a>
+    </div>
+        <div class="col" style="text-align:right">
+            <div><strong>Total no of items tracked: {{item_no}}</strong></div>
+            <div><strong>Discounted items: {{count_disc}} </strong></div>
+        </div>
+    </div>
+    {% if lists %}
+      {% for item in lists %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>{{item.name}}</h5>
+                <a href={%url 'track:delete' item.id %}><button class="btn btn-danger">Delete</button></a>
+            </div>
+          </div>
+        <div class="card-body">
+            <div class="blockquote">
+            <div>Current price: {{item.curr_val}}</div>
+            <div>Expected deal: {{item.exp_val}}</div>
+            <div>Difference: {{item.differ|coloring}}</div>
+            <div>Link:<a href="{{item.url}}">{{item.url}}</a></div>
+            </div>
+        </div>
+
+
+    {%endfor %}
+    {% else %}
+    <h3> No items are tracked currently </h3>
+    {% endif %}
+{% endblock %}
